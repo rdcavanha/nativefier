@@ -39,18 +39,18 @@ npm link
     nativefier --name 'Notification' http://www.bennish.net/web-notifications.html --app-user-model-id 'Nativefier.Notification'
     ```
 2. After nativefying an app, you need to create a shortcut in your Start Menu directory with the AppUserModelId parameter chosen above. Since Windows doesn't allow you to directly set this property, we need to use the ShortcutCreator command line app located in the /bin folder:
-  - Go to the directory where you cloned the project and then to the bin directory:
-  ```bash
-  cd bin
-  ```
-  - Call the ShortcutCreator.exe from the command line passing the parameters necessary to the create the shortcut:
-  
-    **ShortcutCreator.exe 'shortcut file name' 'target file absolute path' 'AppUserModelID'**
-    
-    Example:
+    - Go to the directory where you cloned the project and then to the bin directory:
     ```bash
-    ShortcutCreator.exe 'Notification' 'C:\apps\Notification-win32-x64\Notification.exe' 'Nativefier.Notification'
+    cd bin
     ```
+    - Call the ShortcutCreator.exe from the command line passing the parameters necessary to the create the shortcut:
+  
+      **ShortcutCreator.exe 'shortcut file name' 'target file absolute path' 'AppUserModelID'**
+    
+      Example:
+      ```bash
+      ShortcutCreator.exe 'Notification' 'C:\apps\Notification-win32-x64\Notification.exe' 'Nativefier.Notification'
+      ```
 
     The shortcut created can be found in: *%appdata%\Microsoft\Windows\Start Menu\Programs*
     
