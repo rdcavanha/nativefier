@@ -2,15 +2,15 @@
 
 ## Introduction
 
-Enables notifications for Windows notifcations. It has only been tested on Windows 10.
+Enables notifications for Windows. It has only been tested on Windows 10.
 This is my first GitHub fork, so please let me know if there's anything I can improve.
-Everyone is welcomed to improve this fork, specially regarding the TODO section below.
+Everyone is welcome to improve this fork, specially regarding the TODO section below.
 
 ## Fork differences
 
 - Adds the AppUserModelId option required by Windows to display notifications. This parameter is passed using the --app-user-model-id flag
-- Adds an event listener to the notification, so when it's clicked, it shows/focus the app window in case it is minimized/not on focus
-- Adds an exe app (/bin/ShortcutCreator.exe) that creates a shortcut in the user's Start Menu directory. Launching the app from this shortcut is necessary for notifications to work.
+- Adds an event listener to the notification, so when it's clicked, it shows/focus the app window
+- Adds an exe app (/bin/ShortcutCreator.exe) that creates a shortcut in the user's Start Menu directory. Launching the app from the shortcut created by this app is necessary for notifications to work.
 
 ## Set Up
 - Clone the project:
@@ -34,7 +34,7 @@ npm link
 
   Keep in mind you need to use the same AppUserModelId parameter when creating a shortcut in the step below. Also, if more than one app has the same parameter, they will be grouped together on the Windows taskbar (this could be useful for multiple Gmail accounts)
 
-  For example, to test that notifications work on your system:
+  For example:
   ```bash
   nativefier --name 'Notification' http://www.bennish.net/web-notifications.html --app-user-model-id 'Nativefier.Notification'
   ```
@@ -58,12 +58,12 @@ npm link
 
 3. Now launch the app via the shortcut
 
-For more information on how to use Nativefier, please refer to the original project.
+For more information on how to use Nativefier, please refer to the original project documentation.
   
 
 ## TODO
 
-- Integrate the ShortcutCreator.exe app with the build process when nativefying an app so no second step is necessary. I have not been able to do this yet. I suspect it needs to be added to the src/buildMain.js file. If anyone is able to do this, please let me know.
+- Integrate the ShortcutCreator.exe app with the build process when nativefying an app so the second step is not necessary. I have not been able to do this yet. I suspect it needs to be added to the src/buildMain.js file. If anyone is able to do this, please let me know.
 
 ## Credits
 - [Nativefier by jiahaog ](https://github.com/jiahaog/nativefier)
