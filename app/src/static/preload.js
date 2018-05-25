@@ -15,7 +15,12 @@ function setNotificationCallback(callback) {
   const OldNotify = window.Notification;
   const newNotify = (title, opt) => {
     callback(title, opt);
-    return new OldNotify(title, opt);
+    const old = new OldNotify(title, opt);
+    // Register event listener for notification click on Windows
+    old.addEventListener('click', () => {
+      ipcRenderer.send('notification-click');
+    });
+    return old;
   };
   newNotify.requestPermission = OldNotify.requestPermission.bind(OldNotify);
   Object.defineProperty(newNotify, 'permission', {

@@ -68,6 +68,11 @@ if (appArgs.basicAuthPassword) {
   );
 }
 
+// Registers the AppUserModelId on Electron
+if (appArgs.appUserModelId) {
+  app.commandLine.appendSwitch('app-user-model-id', appArgs.appUserModelId);
+}
+
 // do nothing for setDockBadge if not OSX
 let setDockBadge = () => {};
 
@@ -107,6 +112,10 @@ app.on('before-quit', () => {
     app.exit(0);
   }
 });
+
+if (appArgs.appUserModelId) {
+  app.setAppUserModelId(appArgs.appUserModelId);
+}
 
 if (appArgs.crashReporter) {
   app.on('will-finish-launching', () => {

@@ -1,138 +1,72 @@
-# Nativefier
-
-[![Build Status](https://travis-ci.org/jiahaog/nativefier.svg?branch=development)](https://travis-ci.org/jiahaog/nativefier)
-[![Code Climate](https://codeclimate.com/github/jiahaog/nativefier/badges/gpa.svg)](https://codeclimate.com/github/jiahaog/nativefier)
-[![npm version](https://badge.fury.io/js/nativefier.svg)](https://www.npmjs.com/package/nativefier)
-[![Dependency Status](https://david-dm.org/jiahaog/nativefier.svg)](https://david-dm.org/jiahaog/nativefier)
-
-![Dock](screenshots/dock.png)
-
-You want to make a native wrapper for WhatsApp Web (or any web page).
-
-```bash
-nativefier web.whatsapp.com
-```
-
-![Walkthrough](screenshots/walkthrough.gif)
-
-You're done.
-
-## Table of Contents
-
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Optional Dependencies](#optional-dependencies)
-  - [How It Works](#how-it-works)
-  - [API Documentation](docs/api.md)
-  - [Changelog](docs/changelog.md)
-  - [Development](docs/development.md)
-  - [License](#license)
+# Nativefier Fork with working Windows 10 Notifications
 
 ## Introduction
 
-Nativefier is a command line tool that allows you to easily create a desktop application for any web site with succinct and minimal configuration. Apps are wrapped by [Electron](http://electron.atom.io) in an OS executable (`.app`, `.exe`, etc.) for use on Windows, macOS and Linux.
+Enables notifications for Windows notifcations. It has only been tested on Windows 10.
+This is my first GitHub fork, so please let me know if there's anything I can improve.
+Everyone is welcomed to improve this fork, specially regarding the TODO section below.
 
-I did this because I was tired of having to `⌘-tab` or `alt-tab` to my browser and then search through the numerous open tabs when I was using [Facebook Messenger](http://messenger.com) or [Whatsapp Web](http://web.whatsapp.com).
+## Fork differences
 
-View the changelog [here](https://github.com/jiahaog/nativefier/blob/development/docs/changelog.md).
+- Adds the AppUserModelId option required by Windows to display notifications. This parameter is passed using the --app-user-model-id flag
+- Adds an event listener to the notification, so when it's clicked, it shows/focus the app window in case it is minimized/not on focus
+- Adds an exe app (/bin/ShortcutCreator.exe) that creates a shortcut in the user's Start Menu directory. Launching the app from this shortcut is necessary for notifications to work.
 
-[Relevant Hacker News Thread](https://news.ycombinator.com/item?id=10930718)
-
-### Features
-
-- Automatically retrieves the correct icon and app name
-- Flash Support (with [`--flash`](docs/api.md#flash) flag)
-- Javascript and CSS injection
-
-## Installation
-
-### Requirements
-- macOS 10.9+ / Windows / Linux
-- [Node.js](https://nodejs.org/) `>=4`
-
+## Set Up
+- Clone the project:
 ```bash
-npm install nativefier -g
+git clone https://github.com/rdcvnh/nativefier.git
+cd nativefier
 ```
-
-See [optional dependencies](#optional-dependencies) for more.
+- Build the app:
+```bash
+npm run dev-up-win
+```
+- Link the app:
+```bash
+npm link
+```
 
 ## Usage
+1. The usage is identical to the original nativiefier project, however, to get notifications to work you need to pass the **--app-user-model-id** parameter when nativefying an app. This can be anything you like, such as *Gmail.Work*, *Nativefier.Gmail*, etc...
 
-Creating a native desktop app for [medium.com](http://medium.com):
+  It should be less than 128 characters, use camelCase style and contain no special characters and spaces. You may separate words by a period
 
-```bash
-nativefier "http://medium.com"
-```
+  Keep in mind you need to use the same AppUserModelId parameter when creating a shortcut in the step below. Also, if more than one app has the same parameter, they will be grouped together on the Windows taskbar (this could be useful for multiple Gmail accounts)
 
-Nativefier will intelligently attempt to determine the app name, your OS and processor architecture, among other options. If desired, the app name or other options can be overwritten by specifying the `--name "Medium"` as part of the command line options, as such.
+  For example, to test that notifications work on your system:
+  ```bash
+  nativefier --name 'Notification' http://www.bennish.net/web-notifications.html --app-user-model-id 'Nativefier.Notification'
+  ```
+2. After nativefying an app, you need to create a shortcut in your Start Menu directory with the AppUserModelId parameter chosen above. Since Windows doesn't allow you to directly set this property, we need to use the ShortcutCreator command line app located in the /bin folder:
+  - Go to the directory where you cloned the project and then to the bin directory:
+  ```bash
+  cd bin
+  ```
+  - Call the ShortcutCreator.exe from the command line passing the parameters necessary to the create the shortcut:
+  
+    **ShortcutCreator.exe 'shortcut file name' 'target file absolute path' 'AppUserModelID'**
+    
+    Example:
+    ```bash
+    ShortcutCreator.exe 'Notification' 'C:\apps\Notification-win32-x64\Notification.exe' 'Nativefier.Notification'
+    ```
 
-```bash
-nativefier --name "Some Awesome App" "http://medium.com"
-```
-Read the [API documentation](docs/api.md) for other command line flags and options that can be used to configure the packaged app.
+    The shortcut created can be found in: *%appdata%\Microsoft\Windows\Start Menu\Programs*
+    
+    It should also appear in your Windows Start Menu
 
-If you would like high resolution icons to be used, please contribute to the [icon repository](https://github.com/jiahaog/nativefier-icons)!
+3. Now launch the app via the shortcut
 
-**For Windows Users:** Take note that the application menu is automatically hidden by default, you can press `alt` on your keyboard to access it.
+For more information on how to use Nativefier, please refer to the original project.
+  
 
-**For Linux Users:** Do not put spaces if you define the app name yourself with `--name`, as this will cause problems (tested on Ubuntu 14.04) when pinning a packaged app to the launcher.
+## TODO
 
-## Optional Dependencies
+- Integrate the ShortcutCreator.exe app with the build process when nativefying an app so no second step is necessary. I have not been able to do this yet. I suspect it needs to be added to the src/buildMain.js file. If anyone is able to do this, please let me know.
 
-### Icons for Windows Apps from non-Windows platforms
-
-You need [Wine](https://www.winehq.org/) installed, make sure that `wine` is in your `$PATH`.
-
-### Icon Conversion for macOS
-
-To support conversion of a `.png` or `.ico` into a `.icns` for a packaged macOS app icon (currently only supported on macOS), you need the following dependencies.
-
-#### [iconutil](https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Optimizing/Optimizing.html)
-
-You need [Xcode](https://developer.apple.com/xcode/) installed.
-
-#### [imagemagick](http://www.imagemagick.org/script/index.php)
-
-Make sure `convert` and `identify` are in your `$PATH`. If the tools are not found then nativefier will fallback on using the built-in macOS tool `sips` to perform the conversion.
-
-### Flash
-
-#### [Google Chrome](https://www.google.com/chrome/)
-
-Google Chrome is required for flash to be supported. Alternatively, you could download the PepperFlash Chrome plugin and specify the path to it directly with the `--flash` flag. See the command line options below for more details.
-
-## How It Works
-
-A template app with the appropriate event listeners and callbacks set up is included in the `./app` folder. When the `nativefier` command is executed, this folder is copied to a temporary directory with the appropriate parameters in a configuration file, and is packaged into an app with [Electron Packager](https://github.com/electron-userland/electron-packager).
-
-In addition, I built [GitCloud](https://github.com/jiahaog/gitcloud) to use GitHub as an icon index, and also the [pageIcon](https://github.com/jiahaog/page-icon) fallback to infer a relevant icon from a url.
-
-## API Documentation
-
-See [API](docs/api.md).
-
-## Changelog
-
-See [Changelog](docs/changelog.md).
-
-## Development
-
-See [Development](docs/development.md).
-
-## Docker Image
-
-The [Dockerfile](Dockerfile) is designed to be used like the "normal" nativefier app. By default, the command `nativefier --help` will be executed. Before you can use the image you have to build it like follow:
-
-    docker build -t local/nativefier .
- 
-After that, you can build your first nativefier app to the local `$TARGET-PATH`. Ensure you have write access to the `$TARGET-PATH`:
-
-    docker run -v $TARGET-PATH:/target local/nativefier https://my-web-app.com/ /target/
-
-You can also pass nativefier flags, and mount additional volumes to provide local files. For example, to use a icon:
-
-    docker run -v $PATH_TO_ICON/:/src -v $TARGET-PATH:/target local/nativefier --icon /src/icon.png --name whatsApp -p linux -a x64 https://my-web-app.com/ /target/
-
-## License
-
-[MIT](LICENSE.md)
+## Credits
+- [Nativefier by jiahaog ](https://github.com/jiahaog/nativefier)
+- This fork is based on the answers given by some GitHub users on the following issue: https://github.com/jiahaog/nativefier/issues/887
+- The ShortcutCreator.exe uses the following piece of code: https://emoacht.wordpress.com/2012/11/14/csharp-appusermodelid/
+- Rodrigo Cavanha (me)

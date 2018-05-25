@@ -297,6 +297,13 @@ function createMainWindow(inpOptions, onAppQuit, setDockBadge) {
     });
   }
 
+  // Listen to notification click event and show the mainWindow
+  ipcMain.on('notification-click', () => {
+    if (!mainWindow.isFocused()) {
+      mainWindow.show();
+    }
+  });
+
   mainWindow.webContents.on('new-window', onNewWindow);
 
   mainWindow.loadURL(options.targetUrl);

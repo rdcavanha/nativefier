@@ -72,6 +72,7 @@ export default function(inpOptions) {
     tray: inpOptions.tray || false,
     basicAuthUsername: inpOptions.basicAuthUsername || null,
     basicAuthPassword: inpOptions.basicAuthPassword || null,
+    appUserModelId: inpOptions.appUserModelId || null,
     alwaysOnTop: inpOptions.alwaysOnTop || false,
   };
 

@@ -194,6 +194,10 @@ if (require.main === module) {
     .option('--tray', 'allow app to stay in system tray')
     .option('--basic-auth-username <value>', 'basic http(s) auth username')
     .option('--basic-auth-password <value>', 'basic http(s) auth password')
+    .option(
+      '--app-user-model-id <value>',
+      `"registers the AppUserModelId option for Windows notifications and creates a shortcut in the user's Start Menu directory with this parameter. If the same value is used for another app, they will be grouped together on the taskbar. Example.: Nativefier.Gmail"`,
+    )
     .option('--always-on-top', 'enable always on top window')
     .parse(process.argv);
 
