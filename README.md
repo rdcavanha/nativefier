@@ -67,6 +67,6 @@ For more information on how to use Nativefier, please refer to the original proj
 
 ## Credits
 - [Nativefier by jiahaog ](https://github.com/jiahaog/nativefier)
-- This fork is based on the answers given by some GitHub users on the following issue: https://github.com/jiahaog/nativefier/issues/887
+- This fork is based on the answers given by some GitHub users on the following issue: https://github.com/jiahaog/nativefier/issues/88
 - The ShortcutCreator.exe uses the following piece of code: https://emoacht.wordpress.com/2012/11/14/csharp-appusermodelid/
 - Rodrigo Cavanha (me)
