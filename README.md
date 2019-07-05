@@ -1,3 +1,6 @@
+
+# NOTE: This fork is likely outdated by now. Please refer to the original nativefier repo.
+
 # Nativefier Fork with working Windows 10 Notifications
 
 ## Introduction
